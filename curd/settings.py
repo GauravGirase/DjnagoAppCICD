@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--0jyv+*lvigu)1v%b5f4c6f9mh#9z$o$be0&^9+#@%2+0!=x+h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://django-curd.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -122,7 +122,3 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-# Activate Django-Heroku.
-import django_heroku
-django_heroku.settings(locals())
