@@ -1,34 +1,22 @@
-version: '2'
 services:
-  nginx:
-    image: nginx:latest
-    container_name: dev-nginx
-    restart: always
-    ports:
-      - "8001:80"
+  db:
+    image: postgres
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - .:/usr/src/app
-      - ./devlogdna:/var/log/nginx
-    depends_on:
-      - web
-    networks:
-      - dev-network
-      
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: dev-django
-    restart: always
-    command: bash -c "pip3 install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && gunicorn curd.wsgi -b 0.0.0.0:80"
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/usr/src/app
-    expose:
-      - "80"
-    networks:
-      - dev-network
-
-networks:
-  dev-network:
-    driver: bridge
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
